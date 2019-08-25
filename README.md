@@ -25,4 +25,4 @@ Open a PNG or JPG image of a face. Select where each eye and the mouth are locat
 
 # Known bug
 
-- When a TAL file is loaded within a different screen size resolution, the data points may be misplaced.
+- When a TAL file is loaded with a different screen size resolution than the original, the data points may be misplaced.
