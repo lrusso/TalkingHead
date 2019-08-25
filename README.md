@@ -8,6 +8,7 @@ https://lrusso.github.io/TalkingHead/TalkingHead.htm
 
 # Demo
 
+![alt screenshot](https://raw.githubusercontent.com/lrusso/TalkingHead/master/TalkingHead.gif)
 
 # Roadmap
 
