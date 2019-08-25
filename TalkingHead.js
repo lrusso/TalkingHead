@@ -318,8 +318,8 @@ function animateClear()
 
 	// CLEARING CANVAS
 	document.getElementById("myCanvasResult").getContext("2d").clearRect(0, 0, document.getElementById("myCanvasResult").width, document.getElementById("myCanvasResult").height);
-	document.getElementById("myCanvasResult").width = 320;
-	document.getElementById("myCanvasResult").height = 240;
+	document.getElementById("myCanvasResult").width = 1;
+	document.getElementById("myCanvasResult").height = 1;
 	}
 
 function loadImage(myImageFile)
