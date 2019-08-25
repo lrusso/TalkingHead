@@ -8,7 +8,7 @@ JavaScript algorithms for eyes and mouth movements with Text-to-Speech and GIF e
 
 https://lrusso.github.io/TalkingHead/TalkingHead.htm
 
-# Early Release Demo
+# Early Release Demo GIF
 
 ![alt screenshot](https://raw.githubusercontent.com/lrusso/TalkingHead/master/TalkingHead.gif)
 
