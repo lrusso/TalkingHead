@@ -1,6 +1,6 @@
 # Talking Head
 
-JavaScript algorithms for eyes and mouth movements
+JavaScript algorithms for eyes and mouth movements.
 
 # Web
 
