@@ -6,6 +6,9 @@ JavaScript algorithms for eyes and mouth movements.
 
 https://lrusso.github.io/TalkingHead/TalkingHead.htm
 
+# Demo
+
+
 # Roadmap
 
 - Finish the mouth movement algorithm.
