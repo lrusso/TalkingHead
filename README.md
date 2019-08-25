@@ -10,7 +10,7 @@ https://lrusso.github.io/TalkingHead/TalkingHead.htm
 
 # How to use this software
 
-Open a PNG or JPG image of a face. Use the "Left Eye", "Right Eye" and "Mouth" buttons to select where each eye and the mouth are located. Click in the 'Speak' button in order to start the animation or click in the "GIF" button to automatically generate and download a GIF file. You can also save and load your work as a TAL file.
+Open a PNG or JPG image of a face. Use the "Left Eye", "Right Eye" and "Mouth" buttons to select where each eye and the mouth are located. Click in the "Speak" button in order to start the animation or click in the "GIF" button to automatically generate and download a GIF file. You can also save and load your work as a TAL file.
 
 # Early Release Demo GIF
 
