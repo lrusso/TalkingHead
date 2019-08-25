@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Talking Head</title>
+		<script src="TalkingHead.js"></script>
+		<script src="TalkingHeadGIF.js"></script>
+		<link rel="stylesheet" href="TalkingHead.css" type="text/css">
+	</head>
+	<body>
+		<div class="menubar">
+			<div class="menubar_holder">
+				<label for="fileOpener" id="buttonImport">
+					<span class="menubar_button_open_enabled">&nbsp;</span>
+				</label>
+				<input type="file" class="menubar_buttonHidden" id="fileOpener" onChange="menuOpen(event.target.files);">
+			</div>
+			<div class="menubar_holder">
+				<div class="menubar_button_exporttal_enabled" id="buttonExportTAL" onclick="menuSave();"></div>
+			</div>
+			<div class="menubar_separator"></div>
+			<div class="menubar_holder">
+				<div class="menubar_button_eye1_enabled" id="buttonEye1" onclick="setTool(SELECTED_TOOL_EYE1);"></div>
+			</div>
+			<div class="menubar_holder">
+				<div class="menubar_button_eye2_enabled" id="buttonEye2" onclick="setTool(SELECTED_TOOL_EYE2);"></div>
+			</div>
+			<div class="menubar_separator"></div>
+			<div class="menubar_holder">
+				<div class="menubar_button_mouth_enabled" id="buttonMouth" onclick="setTool(SELECTED_TOOL_MOUTH);"></div>
+			</div>
+			<div class="menubar_separator"></div>
+			<div class="menubar_holder">
+				<div class="menubar_button_speak_enabled" id="buttonSpeak" onclick="menuSpeak();"></div>
+			</div>
+			<div class="menubar_holder">
+				<div class="menubar_button_gif_enabled" id="buttonGif" onclick="menuGIF();"></div>
+			</div>
+			<div class="menubar_separator"></div>
+		</div>
+
+		<div id="loading" class="loading_splash">
+			<div class="loading_splash_container">
+				<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+			</div>
+		</div>
+
+		<canvas width="320" height="240" id="myCanvas"></canvas>
+		<canvas width="320" height="240" id="myCanvasGIF"></canvas>
+		<canvas width="320" height="240" id="myCanvasResult"></canvas>
+
+		<div class="canvas_assets">
+			<canvas width="320" height="240" id="myCanvasRAW"></canvas>
+
+			<canvas width="50" height="50" id="myCanvas1"></canvas>
+			<canvas width="50" height="50" id="myCanvas2"></canvas>
+			<canvas width="50" height="50" id="myCanvas3"></canvas>
+			<canvas width="50" height="50" id="myCanvas4"></canvas>
+
+			<canvas width="50" height="50" id="myCanvas5"></canvas>
+			<canvas width="50" height="50" id="myCanvas6"></canvas>
+			<canvas width="50" height="50" id="myCanvas7"></canvas>
+			<canvas width="50" height="50" id="myCanvas8"></canvas>
+
+			<canvas width="50" height="50" id="myCanvas9"></canvas>
+			<canvas width="50" height="50" id="myCanvas10"></canvas>
+			<canvas width="50" height="50" id="myCanvas11"></canvas>
+			<canvas width="50" height="50" id="myCanvas12"></canvas>
+		</div>
+
+		<script>
+			var cctx1;
+			var cctx2;
+			var cctx3;
+			var cctx4;
+			var cctx5;
+			var cctx6;
+			var cctx7;
+			var cctx8;
+			var cctx9;
+			var cctx10;
+			var cctx11;
+			var cctx12;
+			var cctxGIF;
+
+			var canvasAnimation;
+			var canvasAnimationFrame = 1;
+			var canvasAnimationDelay = 200;
+
+			var canvasFramesLoaded = 0;
+			var canvasToGifFrame1 = new Image();
+			var canvasToGifFrame2 = new Image();
+			var canvasToGifFrame3 = new Image();
+			var canvasToGifFrame4 = new Image();
+			var canvasToGifFrame5 = new Image();
+			var canvasToGifFrame6 = new Image();
+			var canvasToGifFrame7 = new Image();
+
+			var SELECTED_TOOL_EYE1 = 1;
+			var SELECTED_TOOL_EYE2 = 2;
+			var SELECTED_TOOL_MOUTH = 3;
+
+			var eye1_X1 = null;
+			var eye1_Y1 = null;
+			var eye1_X2 = null;
+			var eye1_Y2 = null;
+			var eye1_width = null;
+			var eye1_height = null;
+
+			var eye2_X1 = null;
+			var eye2_Y1 = null;
+			var eye2_X2 = null;
+			var eye2_Y2 = null;
+			var eye2_width = null;
+			var eye2_height = null;
+
+			var mouth_X1 = null;
+			var mouth_Y1 = null;
+			var mouth_X2 = null;
+			var mouth_Y2 = null;
+			var mouth_width = null;
+			var mouth_height = null;
+
+			var selectedImg = false;
+			var selectedTool = null;
+
+			var userLanguage = window.navigator.userLanguage || window.navigator.language;
+
+			var STRING_EYE = "";
+			var STRING_MOUTH = "";
+			var STRING_EMPTYWORKSPACE = "";
+			var STRING_ERRORWITHEXTENSION = "";
+
+			if (userLanguage.substring(0,2)=="es")
+				{
+				STRING_EYE = "OJO";
+				STRING_MOUTH = "BOCA";
+				STRING_EMPTYWORKSPACE = "Debe cargar una imagen para descargar el espacio de trabajo.";
+				STRING_ERRORWITHEXTENSION = "ERROR: Por favor verifique que el archivo se encuentre en formato PNG, JPG o TAL.";
+				}
+				else
+				{
+				STRING_EYE = "EYE";
+				STRING_MOUTH = "MOUTH";
+				STRING_EMPTYWORKSPACE = "You must load an image in order to download the workspace.";
+				STRING_ERRORWITHEXTENSION = "ERROR: Please check that the file is in PNG, JPG or TAL format.";
+				}
+
+			// CREATING THE IMAGE VARIABLE
+			var myImage = new Image();
+
+			// SETTING WHAT HAPPENS WHEN THE IMAGE IS LOADED
+			myImage.onload = function ()
+				{
+				// HIDING THE LOADING SPLASH
+				document.getElementById("loading").style.display = "none";
+
+				// LOADING THE IMAGE DATA
+				reloadImage(false);
+				};
+
+			function menuOpen(files)
+				{
+				try
+					{
+					var extension = files[0].name.split(".").pop().toLowerCase();
+					if (extension=="png" | extension=="jpg" | extension=="jpeg" | extension=="tal")
+						{
+						// SHOWING THE LOADING SPLASH
+						document.getElementById("loading").style.display = "block";
+
+						// CLEARING ANY PREVIOUS ANIMATION (IF ANY)
+						animateClear();
+
+						// CLEARING CANVAS
+						document.getElementById("myCanvas").getContext("2d").clearRect(0, 0, document.getElementById("myCanvas").width, document.getElementById("myCanvas").height);
+						document.getElementById("myCanvasRAW").getContext("2d").clearRect(0, 0, document.getElementById("myCanvasRAW").width, document.getElementById("myCanvasRAW").height);
+						document.getElementById("myCanvasResult").getContext("2d").clearRect(0, 0, document.getElementById("myCanvasResult").width, document.getElementById("myCanvasResult").height);
+						document.getElementById("myCanvas").width = 320;
+						document.getElementById("myCanvas").height = 240;
+						document.getElementById("myCanvasRAW").width = 320;
+						document.getElementById("myCanvasRAW").height = 240;
+						document.getElementById("myCanvasResult").width = 320;
+						document.getElementById("myCanvasResult").height = 240;
+
+						// CLEARING DATA
+						eye1_X1 = null;
+						eye1_Y1 = null;
+						eye1_X2 = null;
+						eye1_Y2 = null;
+						eye1_width = null;
+						eye1_height = null;
+						eye2_X1 = null;
+						eye2_Y1 = null;
+						eye2_X2 = null;
+						eye2_Y2 = null;
+						eye2_width = null;
+						eye2_height = null;
+						mouth_X1 = null;
+						mouth_Y1 = null;
+						mouth_X2 = null;
+						mouth_Y2 = null;
+						mouth_width = null;
+						mouth_height = null;
+						selectedImg = true;
+						selectedTool = null;
+						//myImage.src = null;
+
+						if (extension=="tal")
+							{
+							var filereader = new FileReader();
+							filereader.file_name = files[0].name;
+							filereader.onload = function()
+								{
+								// CLEARING THE SELECTED FILE NAME VALUE
+								document.getElementById("fileOpener").value = null;
+
+								// GETTING THE FILE CONTENT
+								var fileContent = this.result;
+								var fileData = fileContent.split("\n");
+
+								// CATCHING ALL THE NULL DATA POINTS
+								if (fileData[1]=="-"){fileData[1]=null}
+								if (fileData[2]=="-"){fileData[2]=null}
+								if (fileData[3]=="-"){fileData[3]=null}
+								if (fileData[4]=="-"){fileData[4]=null}
+								if (fileData[5]=="-"){fileData[5]=null}
+								if (fileData[6]=="-"){fileData[6]=null}
+								if (fileData[7]=="-"){fileData[7]=null}
+								if (fileData[8]=="-"){fileData[8]=null}
+								if (fileData[9]=="-"){fileData[9]=null}
+								if (fileData[10]=="-"){fileData[10]=null}
+								if (fileData[11]=="-"){fileData[11]=null}
+								if (fileData[12]=="-"){fileData[12]=null}
+
+								// SETTING THE IMAGE DATA POINTS
+								eye1_X1 = parseInt(fileData[1]);
+								eye1_Y1 = parseInt(fileData[2]);
+								eye1_X2 = parseInt(fileData[3]);
+								eye1_Y2 = parseInt(fileData[4]);
+								eye1_width = null;
+								eye1_height = null;
+								eye2_X1 = parseInt(fileData[5]);
+								eye2_Y1 = parseInt(fileData[6]);
+								eye2_X2 = parseInt(fileData[7]);
+								eye2_Y2 = parseInt(fileData[8]);
+								eye2_width = null;
+								eye2_height = null;
+								mouth_X1 = parseInt(fileData[9]);
+								mouth_Y1 = parseInt(fileData[10]);
+								mouth_X2 = parseInt(fileData[11]);
+								mouth_Y2 = parseInt(fileData[12]);
+								mouth_width = null;
+								mouth_height = null;
+
+								// SETTING THE FILE CONTENT FOR THE IMAGE
+								loadImage(fileData[0]);
+								};
+
+							setTimeout(function()
+								{
+								// READING THE FILE
+								filereader.readAsText(files[0]);
+								}, 250);
+							}
+							else
+							{
+							var filereader = new FileReader();
+							filereader.file_name = files[0].name;
+							filereader.onload = function()
+								{
+								// CLEARING THE SELECTED FILE NAME VALUE
+								document.getElementById("fileOpener").value = null;
+
+								// SETTING THE FILE CONTENT FOR THE IMAGE
+								loadImage(this.result);
+								};
+
+							setTimeout(function()
+								{
+								// READING THE FILE
+								filereader.readAsDataURL(files[0]);
+								}, 250);
+							}
+						}
+						else
+						{
+						alert(STRING_ERRORWITHEXTENSION);
+						}
+					}
+					catch(err)
+					{
+					}
+				}
+
+			function menuSave()
+				{
+				if (selectedImg==true)
+					{
+					// RELOADING THE IMAGE WITHOUT SELECTIONS
+					reloadImage(true);
+
+					// GETTING THE IMAGE AS BASE64
+					var imageAsBase64 = document.getElementById("myCanvas").toDataURL("image/png", 1.0);
+
+					// SETTING THE VARIABLE THAT WILL CONTAIN THE DATA TO BE SAVED
+					var dataToSave = "";
+
+					// ADDING THE IMAGE AS BASE64
+					dataToSave = imageAsBase64 + "\n";
+
+					// ADDING THE EYE 1 DATA POINTS SELECTION (IF ANY)
+					if (eye1_X1!=null){dataToSave = dataToSave + eye1_X1 + "\n"}else{dataToSave = dataToSave + "-\n"}
+					if (eye1_Y1!=null){dataToSave = dataToSave + eye1_Y1 + "\n"}else{dataToSave = dataToSave + "-\n"}
+					if (eye1_X2!=null){dataToSave = dataToSave + eye1_X2 + "\n"}else{dataToSave = dataToSave + "-\n"}
+					if (eye1_Y2!=null){dataToSave = dataToSave + eye1_Y2 + "\n"}else{dataToSave = dataToSave + "-\n"}
+
+					// ADDING THE EYE 2 DATA POINTS SELECTION (IF ANY)
+					if (eye2_X1!=null){dataToSave = dataToSave + eye2_X1 + "\n"}else{dataToSave = dataToSave + "-\n"}
+					if (eye2_Y1!=null){dataToSave = dataToSave + eye2_Y1 + "\n"}else{dataToSave = dataToSave + "-\n"}
+					if (eye2_X2!=null){dataToSave = dataToSave + eye2_X2 + "\n"}else{dataToSave = dataToSave + "-\n"}
+					if (eye2_Y2!=null){dataToSave = dataToSave + eye2_Y2 + "\n"}else{dataToSave = dataToSave + "-\n"}
+
+					// ADDING THE MOUTH DATA POINTS SELECTION (IF ANY)
+					if (mouth_X1!=null){dataToSave = dataToSave + mouth_X1 + "\n"}else{dataToSave = dataToSave + "-\n"}
+					if (mouth_Y1!=null){dataToSave = dataToSave + mouth_Y1 + "\n"}else{dataToSave = dataToSave + "-\n"}
+					if (mouth_X2!=null){dataToSave = dataToSave + mouth_X2 + "\n"}else{dataToSave = dataToSave + "-\n"}
+					if (mouth_Y2!=null){dataToSave = dataToSave + mouth_Y2}else{dataToSave = dataToSave + "-"}
+
+					// GENERATING AND DOWNLOADS THE FILE
+					saveString(dataToSave, "TalkingHead.tal");
+
+					// RELOADING THE IMAGE WITH SELECTIONS
+					reloadImage(false);
+					}
+					else
+					{
+					alert(STRING_EMPTYWORKSPACE);
+					}
+				}
+
+			function menuSpeak()
+				{
+				if (selectedImg==true)
+					{
+					// CLEARING ANY PREVIOUS ANIMATION (IF ANY)
+					animateClear();
+
+					setTimeout(function()
+						{
+						// CHECKING SELECTION AND GENERATING IMAGES WITH EYES AND MOUTH MOVEMENTS
+						generateDataForAnimation();
+
+						// DRAWING THE ORIGINAL FACE IMAGE ON THE CANVAS
+						document.getElementById("myCanvasResult").getContext("2d").drawImage(document.getElementById("myCanvasRAW").getContext("2d").canvas, 0, 0, document.getElementById("myCanvas").width, document.getElementById("myCanvas").height, 0, 0, document.getElementById("myCanvas").width, document.getElementById("myCanvas").height);
+
+						// STARTING THE ANIMATION
+						canvasAnimation = setInterval(animate, canvasAnimationDelay);
+						}, 250);
+					}
+				}
+
+			function menuGIF()
+				{
+				if (selectedImg==true)
+					{
+					// CLEARING ANY PREVIOUS ANIMATION (IF ANY)
+					animateClear();
+
+					// SHOWING THE LOADING SPLASH
+					document.getElementById("loading").style.display = "block";
+
+					setTimeout(function()
+						{
+						// CHECKING SELECTION AND GENERATING IMAGES WITH EYES AND MOUTH MOVEMENTS
+						generateDataForAnimation();
+
+						// DRAWING THE ORIGINAL FACE IMAGE ON THE CANVAS
+						cctxGIF.drawImage(document.getElementById("myCanvasRAW").getContext("2d").canvas, 0, 0, document.getElementById("myCanvas").width, document.getElementById("myCanvas").height,  0, 0, document.getElementById("myCanvas").width, document.getElementById("myCanvas").height);
+
+						// SETTING WHICH FUNCTION WILL BE EXECUTED WHEN EACH IMAGE IS LOADED IN MEMORY
+						canvasToGifFrame1.onload = menuGIFExport;
+						canvasToGifFrame2.onload = menuGIFExport;
+						canvasToGifFrame3.onload = menuGIFExport;
+						canvasToGifFrame4.onload = menuGIFExport;
+						canvasToGifFrame5.onload = menuGIFExport;
+						canvasToGifFrame6.onload = menuGIFExport;
+						canvasToGifFrame7.onload = menuGIFExport;
+
+						// GENERATING AND SAVING FRAME 1
+						if (eye1_X1!=null && eye1_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas1").getContext("2d").canvas, eye1_X1, eye1_Y1, eye1_width, eye1_height)}
+						if (eye2_X1!=null && eye2_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas5").getContext("2d").canvas, eye2_X1, eye2_Y1, eye2_width, eye2_height)}
+						if (mouth_X1!=null && mouth_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas9").getContext("2d").canvas, mouth_X1, mouth_Y1, mouth_width, mouth_height)}
+						canvasToGifFrame1.src = document.getElementById("myCanvasGIF").toDataURL();
+
+						// GENERATING AND SAVING FRAME 2
+						if (eye1_X1!=null && eye1_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas2").getContext("2d").canvas, eye1_X1, eye1_Y1, eye1_width, eye1_height)}
+						if (eye2_X1!=null && eye2_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas6").getContext("2d").canvas, eye2_X1, eye2_Y1, eye2_width, eye2_height)}
+						if (mouth_X1!=null && mouth_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas10").getContext("2d").canvas, mouth_X1, mouth_Y1, mouth_width, mouth_height)}
+						canvasToGifFrame2.src = document.getElementById("myCanvasGIF").toDataURL();
+
+						// GENERATING AND SAVING FRAME 3
+						if (eye1_X1!=null && eye1_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas3").getContext("2d").canvas, eye1_X1, eye1_Y1, eye1_width, eye1_height)}
+						if (eye2_X1!=null && eye2_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas7").getContext("2d").canvas, eye2_X1, eye2_Y1, eye2_width, eye2_height)}
+						if (mouth_X1!=null && mouth_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas11").getContext("2d").canvas, mouth_X1, mouth_Y1, mouth_width, mouth_height)}
+						canvasToGifFrame3.src = document.getElementById("myCanvasGIF").toDataURL();
+
+						// GENERATING AND SAVING FRAME 4
+						if (eye1_X1!=null && eye1_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas4").getContext("2d").canvas, eye1_X1, eye1_Y1, eye1_width, eye1_height)}
+						if (eye2_X1!=null && eye2_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas8").getContext("2d").canvas, eye2_X1, eye2_Y1, eye2_width, eye2_height)}
+						if (mouth_X1!=null && mouth_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas12").getContext("2d").canvas, mouth_X1, mouth_Y1, mouth_width, mouth_height)}
+						canvasToGifFrame4.src = document.getElementById("myCanvasGIF").toDataURL();
+
+						// GENERATING AND SAVING FRAME 5
+						if (eye1_X1!=null && eye1_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas3").getContext("2d").canvas, eye1_X1, eye1_Y1, eye1_width, eye1_height)}
+						if (eye2_X1!=null && eye2_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas7").getContext("2d").canvas, eye2_X1, eye2_Y1, eye2_width, eye2_height)}
+						if (mouth_X1!=null && mouth_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas11").getContext("2d").canvas, mouth_X1, mouth_Y1, mouth_width, mouth_height)}
+						canvasToGifFrame5.src = document.getElementById("myCanvasGIF").toDataURL();
+
+						// GENERATING AND SAVING FRAME 6
+						if (eye1_X1!=null && eye1_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas2").getContext("2d").canvas, eye1_X1, eye1_Y1, eye1_width, eye1_height)}
+						if (eye2_X1!=null && eye2_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas6").getContext("2d").canvas, eye2_X1, eye2_Y1, eye2_width, eye2_height)}
+						if (mouth_X1!=null && mouth_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas10").getContext("2d").canvas, mouth_X1, mouth_Y1, mouth_width, mouth_height)}
+						canvasToGifFrame6.src = document.getElementById("myCanvasGIF").toDataURL();
+
+						// GENERATING AND SAVING FRAME 7
+						if (eye1_X1!=null && eye1_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas1").getContext("2d").canvas, eye1_X1, eye1_Y1, eye1_width, eye1_height)}
+						if (eye2_X1!=null && eye2_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas5").getContext("2d").canvas, eye2_X1, eye2_Y1, eye2_width, eye2_height)}
+						if (mouth_X1!=null && mouth_X2!=null){cctxGIF.drawImage(document.getElementById("myCanvas9").getContext("2d").canvas, mouth_X1, mouth_Y1, mouth_width, mouth_height)}
+						canvasToGifFrame7.src = document.getElementById("myCanvasGIF").toDataURL();
+						}, 200);
+					}
+				}
+
+			function menuGIFExport()
+				{
+				// WAITING FOR ALL THE FRAMES TO BE LOADED
+				canvasFramesLoaded = canvasFramesLoaded + 1;
+				if (canvasFramesLoaded < 7)
+					{
+					return;
+					}
+				canvasFramesLoaded = 0;
+
+				// GENERATING THE GIF FILE
+				var gif = new GIF({workers:2,quality:0});
+				gif.addFrame(canvasToGifFrame1,{delay:canvasAnimationDelay});
+				gif.addFrame(canvasToGifFrame2,{delay:canvasAnimationDelay});
+				gif.addFrame(canvasToGifFrame3,{delay:canvasAnimationDelay});
+				gif.addFrame(canvasToGifFrame4,{delay:canvasAnimationDelay});
+				gif.addFrame(canvasToGifFrame5,{delay:canvasAnimationDelay});
+				gif.addFrame(canvasToGifFrame6,{delay:canvasAnimationDelay});
+				gif.addFrame(canvasToGifFrame7,{delay:canvasAnimationDelay});
+				gif.on("finished", function(blob)
+					{
+					// HIDING THE LOADING SPLASH
+					document.getElementById("loading").style.display = "none";
+
+					// DOWNLOADING THE GIF FILE
+					save(blob,"TalkingHead.gif");
+					});
+				gif.render();
+				}
+
+			function saveString(text, filename)
+				{
+				save(new Blob([text], {type:"text/plain"}), filename);
+				}
+
+			function save(blob, filename)
+				{
+				var link = document.createElement("a");
+				link.style.display = "none";
+				document.body.appendChild(link);
+				link.href = URL.createObjectURL(blob);
+				link.download = filename || "data.json";
+				link.click();
+				}
+
+			window.onload = function()
+				{
+				document.getElementById("myCanvas").addEventListener("click", mouseClickHandler);
+				document.getElementById("myCanvas").addEventListener("mouseover", mouseOverHandler);
+				document.getElementById("myCanvas").addEventListener("mousemove", mouseMoveHandler);
+				}
+		</script>
+	</body>
+</html>
