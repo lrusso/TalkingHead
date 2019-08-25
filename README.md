@@ -25,4 +25,4 @@ Open a PNG or JPG image of a face. Use the 'Eye Left', 'Eye Right' and 'Mouth' b
 
 # Known bug
 
-- When a TAL file is loaded with a different screen size resolution than the original, the data points may be misplaced.
+- When a TAL file is loaded with a different screen size resolution, the data points may be misplaced.
