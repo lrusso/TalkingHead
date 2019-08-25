@@ -21,3 +21,4 @@ Open a PNG or JPG image of a face. Select where each eye and the mouth are locat
 - Optimizing the eye movement algorithm.
 - Finishing the mouth movement algorithm.
 - Implementing Text to Speech function.
+- Resizing the eyes with a dynamic height.
