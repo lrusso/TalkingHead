@@ -372,9 +372,6 @@ function reloadImage(exportingProcess)
 	document.getElementById("myCanvas").getContext("2d").drawImage(myImage, 0, 0, width, height);
 	document.getElementById("myCanvasRAW").getContext("2d").drawImage(myImage, 0, 0, width, height);
 
-	// SCROLLS TO THE TOP
-	try{window.scrollTo(0,0)}catch(err){}
-
 	// ONLY WILL DRAW THE SELECTION IF THE EXPORTING PROCESS IS NOT RUNNING
 	if (exportingProcess==false)
 		{

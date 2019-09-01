@@ -208,6 +208,9 @@
 						selectedTool = null;
 						//myImage.src = null;
 
+						// SCROLLS TO THE TOP
+						try{window.scrollTo(0,0)}catch(err){}
+
 						if (extension=="tal")
 							{
 							var filereader = new FileReader();
