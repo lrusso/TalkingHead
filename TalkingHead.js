@@ -354,21 +354,14 @@ function reloadImage(exportingProcess)
 
 	if (selectedTAL==false)
 		{
-		// GETTING THE MAX IMAGE SIZE POSSIBLE
-		var maxHeight = y - 57; // 57 = TOOLBAR HEIGHT
-		var maxWidth = x;
+		// GETTING THE MAX IMAGE SIZE POSSIBLE - 500PX MAX POSSIBLE BECAUSE OF PERFORMANCE ISSUES
+		var maxHeight = 550 - 57; // 57 = TOOLBAR HEIGHT
 		var ratio = null;
 
-		// CHECKING IF THE IMAGE SIZE IS LARGER THAN THE MAX IMAGE SIZE POSSIBLE
-		if(height > maxHeight)
+		// RESIZING THE IMAGE IF THE HEIGHT IS LARGER THAN 500PX
+		if (height>maxHeight)
 			{
 			ratio = maxHeight / height;
-			width = width * ratio;
-			height = height * ratio;
-			}
-		else if(width > maxWidth)
-			{
-			ratio = maxWidth / width;
 			width = width * ratio;
 			height = height * ratio;
 			}
