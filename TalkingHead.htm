@@ -16,7 +16,10 @@
 				<input type="file" class="menubar_buttonHidden" id="fileOpener" onChange="menuOpen(event.target.files);">
 			</div>
 			<div class="menubar_holder">
-				<div class="menubar_button_exporttal_enabled" id="buttonExportTAL" onclick="menuSave();"></div>
+				<div class="menubar_button_exporttal_enabled" id="buttonExportTAL" onclick="menuSaveTAL();"></div>
+			</div>
+			<div class="menubar_holder">
+				<div class="menubar_button_exportpng_enabled" id="buttonExportPNG" onclick="menuSavePNG();"></div>
 			</div>
 			<div class="menubar_separator"></div>
 			<div class="menubar_holder">
@@ -301,7 +304,7 @@
 					}
 				}
 
-			function menuSave()
+			function menuSaveTAL()
 				{
 				if (selectedImg==true)
 					{
@@ -335,8 +338,30 @@
 					if (mouth_X2!=null){dataToSave = dataToSave + mouth_X2 + "\n"}else{dataToSave = dataToSave + "-\n"}
 					if (mouth_Y2!=null){dataToSave = dataToSave + mouth_Y2}else{dataToSave = dataToSave + "-"}
 
-					// GENERATING AND DOWNLOADS THE FILE
+					// GENERATING AND DOWNLOADING THE FILE
 					saveString(dataToSave, "TalkingHead.tal");
+
+					// RELOADING THE IMAGE WITH SELECTIONS
+					reloadImage(false);
+					}
+					else
+					{
+					alert(STRING_EMPTYWORKSPACE);
+					}
+				}
+
+			function menuSavePNG()
+				{
+				if (selectedImg==true)
+					{
+					// RELOADING THE IMAGE WITHOUT SELECTIONS
+					reloadImage(true);
+
+					// GENERATING AND DOWNLOADING THE FILE
+					document.getElementById("myCanvas").toBlob(function(blob)
+						{
+						saveString(blob, "TalkingHead.png");
+						},"image/png");
 
 					// RELOADING THE IMAGE WITH SELECTIONS
 					reloadImage(false);
