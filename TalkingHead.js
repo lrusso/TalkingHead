@@ -340,23 +340,26 @@ function reloadImage(exportingProcess)
 	var height = myImage.height;
 	var width = myImage.width;
 
-	// GETTING THE MAX IMAGE SIZE POSSIBLE
-	var maxHeight = y - 57; // 57 = TOOLBAR HEIGHT
-	var maxWidth = x;
-	var ratio = null;
+	if (selectedTAL==false)
+		{
+		// GETTING THE MAX IMAGE SIZE POSSIBLE
+		var maxHeight = y - 57; // 57 = TOOLBAR HEIGHT
+		var maxWidth = x;
+		var ratio = null;
 
-	// CHECKING IF THE IMAGE SIZE IS LARGER THAN THE MAX IMAGE SIZE POSSIBLE
-	if(height > maxHeight)
-		{
-		ratio = maxHeight / height;
-		width = width * ratio;
-		height = height * ratio;
-		}
-	else if(width > maxWidth)
-		{
-		ratio = maxWidth / width;
-		width = width * ratio;
-		height = height * ratio;
+		// CHECKING IF THE IMAGE SIZE IS LARGER THAN THE MAX IMAGE SIZE POSSIBLE
+		if(height > maxHeight)
+			{
+			ratio = maxHeight / height;
+			width = width * ratio;
+			height = height * ratio;
+			}
+		else if(width > maxWidth)
+			{
+			ratio = maxWidth / width;
+			width = width * ratio;
+			height = height * ratio;
+			}
 		}
 
 	// RESIZING THE CANVAS CONTAINER
@@ -368,6 +371,9 @@ function reloadImage(exportingProcess)
 	// DRAWING THE IMAGE
 	document.getElementById("myCanvas").getContext("2d").drawImage(myImage, 0, 0, width, height);
 	document.getElementById("myCanvasRAW").getContext("2d").drawImage(myImage, 0, 0, width, height);
+
+	// SCROLLS TO THE TOP
+	try{window.scrollTo(0,0)}catch(err){}
 
 	// ONLY WILL DRAW THE SELECTION IF THE EXPORTING PROCESS IS NOT RUNNING
 	if (exportingProcess==false)

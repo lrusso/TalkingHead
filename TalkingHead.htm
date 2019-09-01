@@ -45,9 +45,7 @@
 			</div>
 		</div>
 
-		<canvas width="1" height="1" id="myCanvas"></canvas>
-		<canvas width="1" height="1" id="myCanvasGIF"></canvas>
-		<canvas width="1" height="1" id="myCanvasResult"></canvas>
+		<div class="canvas_container"><canvas width="1" height="1" id="myCanvas"></canvas><canvas width="1" height="1" id="myCanvasGIF"></canvas><canvas width="1" height="1" id="myCanvasResult"></canvas></div>
 
 		<div class="canvas_assets">
 			<canvas width="320" height="240" id="myCanvasRAW"></canvas>
@@ -123,6 +121,7 @@
 
 			var selectedImg = false;
 			var selectedTool = null;
+			var selectedTAL = false;
 
 			var userLanguage = window.navigator.userLanguage || window.navigator.language;
 
@@ -174,10 +173,13 @@
 
 						// CLEARING CANVAS
 						document.getElementById("myCanvas").getContext("2d").clearRect(0, 0, document.getElementById("myCanvas").width, document.getElementById("myCanvas").height);
+						document.getElementById("myCanvasGIF").getContext("2d").clearRect(0, 0, document.getElementById("myCanvasGIF").width, document.getElementById("myCanvasGIF").height);
 						document.getElementById("myCanvasRAW").getContext("2d").clearRect(0, 0, document.getElementById("myCanvasRAW").width, document.getElementById("myCanvasRAW").height);
 						document.getElementById("myCanvasResult").getContext("2d").clearRect(0, 0, document.getElementById("myCanvasResult").width, document.getElementById("myCanvasResult").height);
 						document.getElementById("myCanvas").width = 1;
 						document.getElementById("myCanvas").height = 1;
+						document.getElementById("myCanvasGIF").width = 1;
+						document.getElementById("myCanvasGIF").height = 1;
 						document.getElementById("myCanvasRAW").width = 1;
 						document.getElementById("myCanvasRAW").height = 1;
 						document.getElementById("myCanvasResult").width = 1;
@@ -252,6 +254,7 @@
 								mouth_Y2 = parseInt(fileData[12]);
 								mouth_width = null;
 								mouth_height = null;
+								selectedTAL = true;
 
 								// SETTING THE FILE CONTENT FOR THE IMAGE
 								loadImage(fileData[0]);
@@ -271,6 +274,8 @@
 								{
 								// CLEARING THE SELECTED FILE NAME VALUE
 								document.getElementById("fileOpener").value = null;
+
+								selectedTAL = false;
 
 								// SETTING THE FILE CONTENT FOR THE IMAGE
 								loadImage(this.result);
