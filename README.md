@@ -22,7 +22,3 @@ Open a PNG or JPG image of a face. Use the "Left Eye", "Right Eye" and "Mouth" b
 - Finishing the mouth movement algorithm.
 - Implementing Text to Speech function.
 - Resizing the eyes with a dynamic height.
-
-# Known bug
-
-- When a TAL file is loaded with a different screen size resolution, the data points may be misplaced.
