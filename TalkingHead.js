@@ -3,6 +3,12 @@ function mouseClickHandler()
 	var eventX = event.clientX;
 	var eventY = event.clientY - 57; // 57 = TOOLBAR HEIGHT
 
+	// ADDING THE SCROLLING VALUES (IF ANY)
+	var left = window.scrollX;
+	var top = window.scrollY;
+	eventX = eventX + left;
+	eventY = eventY + top;
+
 	// CHECKING WHICH TOOL IS BEEN USED
 	if (selectedTool==SELECTED_TOOL_EYE1)
 		{
@@ -124,6 +130,12 @@ function mouseMoveHandler()
 	{
 	var eventX = event.clientX;
 	var eventY = event.clientY - 57; // 57 = TOOLBAR HEIGHT
+
+	// ADDING THE SCROLLING VALUES (IF ANY)
+	var left = window.scrollX;
+	var top = window.scrollY;
+	eventX = eventX + left;
+	eventY = eventY + top;
 
 	if (selectedTool!=null)
 		{
