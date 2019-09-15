@@ -585,18 +585,18 @@ function generateDataForAnimation()
 	// ------------------------------------------------------------------------------------------------
 
 	getEyeScreenshot(cctx1, eye1_X1, eye1_Y1, eye1_width, eye1_height, 0);
-	getEyeScreenshot(cctx2, eye1_X1, eye1_Y1, eye1_width, eye1_height, 2);
-	getEyeScreenshot(cctx3, eye1_X1, eye1_Y1, eye1_width, eye1_height, 4);
-	getEyeScreenshot(cctx4, eye1_X1, eye1_Y1, eye1_width, eye1_height, 6);
+	getEyeScreenshot(cctx2, eye1_X1, eye1_Y1, eye1_width, eye1_height, Math.floor(eye1_height * 0.10));
+	getEyeScreenshot(cctx3, eye1_X1, eye1_Y1, eye1_width, eye1_height, Math.floor(eye1_height * 0.15));
+	getEyeScreenshot(cctx4, eye1_X1, eye1_Y1, eye1_width, eye1_height, Math.floor(eye1_height * 0.20));
 
 	// ------------------------------------------------------------------------------------------------
 	// PROCESS 3 - EYE 2 - TAKING 4 SCREENSHOTS OF THE EYE BEEN CLOSED
 	// ------------------------------------------------------------------------------------------------
 
 	getEyeScreenshot(cctx5, eye2_X1, eye2_Y1, eye2_width, eye2_height, 0);
-	getEyeScreenshot(cctx6, eye2_X1, eye2_Y1, eye2_width, eye2_height, 2);
-	getEyeScreenshot(cctx7, eye2_X1, eye2_Y1, eye2_width, eye2_height, 4);
-	getEyeScreenshot(cctx8, eye2_X1, eye2_Y1, eye2_width, eye2_height, 6);
+	getEyeScreenshot(cctx6, eye2_X1, eye2_Y1, eye2_width, eye2_height, Math.floor(eye1_height * 0.10));
+	getEyeScreenshot(cctx7, eye2_X1, eye2_Y1, eye2_width, eye2_height, Math.floor(eye1_height * 0.15));
+	getEyeScreenshot(cctx8, eye2_X1, eye2_Y1, eye2_width, eye2_height, Math.floor(eye1_height * 0.20));
 
 	// ------------------------------------------------------------------------------------------------
 	// PROCESS 5 - MOUTH - TAKING 4 SCREENSHOTS OF THE MOUTH SMILING
