@@ -594,9 +594,9 @@ function generateDataForAnimation()
 	// ------------------------------------------------------------------------------------------------
 
 	getEyeScreenshot(cctx5, eye2_X1, eye2_Y1, eye2_width, eye2_height, 0);
-	getEyeScreenshot(cctx6, eye2_X1, eye2_Y1, eye2_width, eye2_height, Math.floor(eye1_height * 0.10));
-	getEyeScreenshot(cctx7, eye2_X1, eye2_Y1, eye2_width, eye2_height, Math.floor(eye1_height * 0.15));
-	getEyeScreenshot(cctx8, eye2_X1, eye2_Y1, eye2_width, eye2_height, Math.floor(eye1_height * 0.20));
+	getEyeScreenshot(cctx6, eye2_X1, eye2_Y1, eye2_width, eye2_height, Math.floor(eye2_height * 0.10));
+	getEyeScreenshot(cctx7, eye2_X1, eye2_Y1, eye2_width, eye2_height, Math.floor(eye2_height * 0.15));
+	getEyeScreenshot(cctx8, eye2_X1, eye2_Y1, eye2_width, eye2_height, Math.floor(eye2_height * 0.20));
 
 	// ------------------------------------------------------------------------------------------------
 	// PROCESS 5 - MOUTH - TAKING 4 SCREENSHOTS OF THE MOUTH SMILING
