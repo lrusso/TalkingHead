@@ -545,8 +545,7 @@ function getMouthScreenshot(myTempContext, myTempMouth_X1, myTempMouth_Y1, myTem
 									0, Math.floor(myTempMouth_height/2)+i,
 									myTempMouth_width, myTempMouth_height+i);
 
-
-			// DRAWING THE BLACK HOLE WITHIN THE MOUTH
+			// DRAWING THE BLACK ZONE WITHIN THE MOUTH
 			var marginLeft = 7 + Math.floor(i * 2);
 			var marginRight = myTempMouth_width - 7 - marginLeft - Math.floor(i * 2);
 			myTempContext.beginPath();
