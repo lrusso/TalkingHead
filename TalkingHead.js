@@ -440,7 +440,41 @@ function drawEllipse(x1, y1, x2, y2, labelText)
 	canvasContext.fillText(labelText, x2 - ((x2-x1) *0.5) - (canvasContext.measureText(labelText).width / 2),y2 + 15);
 	}
 
-function clipImageForSelection(tempCanvasContext,tempEye_width,tempEye_height)
+function clipEyeImageForSelection(tempCanvasContext,tempEye_width,tempEye_height)
+	{
+	var x1 = 0;
+	var x2 = tempEye_width;
+	var y1 = 0;
+	var y2 = tempEye_height;
+
+	tempCanvasContext.save();
+
+	var radiusX = (x2 - x1) * 0.5;		// RADIUS FOR X BASED ON INPUT
+	var radiusY = (y2 - y1) * 0.5;		// RADIUS FOR Y BASED ON INPUT
+	var centerX = x1 + radiusX;			// CALC CENTER
+	var centerY = y1 + radiusY;			// CALC CENTER
+	var step = 0.01;					// RESOLUTION OF ELLIPSE
+	var a = step;						// COUNTER
+	var pi2 = Math.PI * 2 - step;		// END ANGLE
+
+	// START A NEW PATH
+	tempCanvasContext.beginPath();
+
+	// SET START POINT AT ANGLE 0
+	tempCanvasContext.moveTo(centerX + radiusX * Math.cos(0),centerY + radiusY * Math.sin(0));
+
+	// CREATE THE ELLIPSE
+	for(; a < pi2; a += step)
+		{
+		tempCanvasContext.lineTo(centerX + radiusX * Math.cos(a),centerY + radiusY * Math.sin(a));
+		}
+	tempCanvasContext.closePath();
+
+	// CLIPPING
+	tempCanvasContext.clip();
+	}
+
+function clipMouthImageForSelection(tempCanvasContext,tempEye_width,tempEye_height)
 	{
 	var x1 = 0;
 	var x2 = tempEye_width;
@@ -479,7 +513,7 @@ function getEyeScreenshot(myTempContext, myTempEye_X1, myTempEye_Y1, myTempEye_w
 	if (myTempEye_X1!=null)
 		{
 		// CLIPPING THE IMAGE TO THE EYE SHAPE
-		clipImageForSelection(myTempContext, myTempEye_width, myTempEye_height);
+		clipEyeImageForSelection(myTempContext, myTempEye_width, myTempEye_height);
 
 		// DRAWING EYE INTO THE CANVAS
 		myTempContext.drawImage(document.getElementById("myCanvasRAW").getContext("2d").canvas, myTempEye_X1, myTempEye_Y1, myTempEye_width, myTempEye_height, 0, 0, myTempEye_width, myTempEye_height);
@@ -497,15 +531,29 @@ function getMouthScreenshot(myTempContext, myTempMouth_X1, myTempMouth_Y1, myTem
 	if (myTempMouth_X1!=null)
 		{
 		// CLIPPING THE IMAGE TO THE MOUTH SHAPE
-		clipImageForSelection(myTempContext, myTempMouth_width, myTempMouth_height);
+		clipMouthImageForSelection(myTempContext, myTempMouth_width, myTempMouth_height);
 
 		// DRAWING MOUTH INTO THE CANVAS
-		myTempContext.drawImage(document.getElementById("myCanvasRAW").getContext("2d").canvas, myTempMouth_X1, myTempMouth_Y1, myTempMouth_width / 4, myTempMouth_height, 0, 0, myTempMouth_width / 4, myTempMouth_height);
+		myTempContext.drawImage(document.getElementById("myCanvasRAW").getContext("2d").canvas, myTempMouth_X1, myTempMouth_Y1 + Math.floor(myTempMouth_height/2), myTempMouth_width, myTempMouth_height, 0, Math.floor(myTempMouth_height/2), myTempMouth_width, myTempMouth_height);
 
-		// DRAWING EYE BEEN CLOSED
+		// DRAWING MOUTH BEEN OPENED
 		for (var i = 0; i < resizing; i++)
 			{
-			myTempContext.drawImage(document.getElementById("myCanvasRAW").getContext("2d").canvas, myTempMouth_X1, myTempMouth_Y1, myTempMouth_width / 4, myTempMouth_height, 0, i, myTempMouth_width / 4, myTempMouth_height-(i+i));
+			myTempContext.drawImage(document.getElementById("myCanvasRAW").getContext("2d").canvas,
+									myTempMouth_X1, myTempMouth_Y1 + Math.floor(myTempMouth_height/2),
+									myTempMouth_width, myTempMouth_height,
+									0, Math.floor(myTempMouth_height/2)+i,
+									myTempMouth_width, myTempMouth_height+i);
+
+
+			// DRAWING THE BLACK HOLE WITHIN THE MOUTH
+			var marginLeft = 7 + Math.floor(i * 2);
+			var marginRight = myTempMouth_width - 7 - marginLeft - Math.floor(i * 2);
+			myTempContext.beginPath();
+			myTempContext.fillStyle = "#181818";
+			myTempContext.rect(marginLeft, Math.floor(myTempMouth_height/2)-1, marginRight, i-1);
+			myTempContext.fill();
+			myTempContext.closePath();
 			}
 		}
 	}
@@ -602,10 +650,8 @@ function generateDataForAnimation()
 	// PROCESS 5 - MOUTH - TAKING 4 SCREENSHOTS OF THE MOUTH SMILING
 	// ------------------------------------------------------------------------------------------------
 
-	/*
 	getMouthScreenshot(cctx9, mouth_X1, mouth_Y1, mouth_width, mouth_height, 0);
 	getMouthScreenshot(cctx10, mouth_X1, mouth_Y1, mouth_width, mouth_height, 2);
 	getMouthScreenshot(cctx11, mouth_X1, mouth_Y1, mouth_width, mouth_height, 4);
 	getMouthScreenshot(cctx12, mouth_X1, mouth_Y1, mouth_width, mouth_height, 6);
-	*/
 	}
