@@ -49,7 +49,7 @@
 			<div class="menubar_separator"></div>
 		</div>
 
-		<div id="loading" class="loading_splash">
+		<div class="loading_splash">
 			<div class="loading_splash_container">
 				<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
 			</div>
@@ -166,7 +166,7 @@
 			myImage.onload = function ()
 				{
 				// HIDING THE LOADING SPLASH
-				document.getElementById("loading").style.display = "none";
+				document.getElementsByClassName("loading_splash")[0].style.display = "none";
 
 				// LOADING THE IMAGE DATA
 				reloadImage(false);
@@ -180,7 +180,7 @@
 					if (extension=="png" | extension=="jpg" | extension=="jpeg" | extension=="tal")
 						{
 						// SHOWING THE LOADING SPLASH
-						document.getElementById("loading").style.display = "block";
+						document.getElementsByClassName("loading_splash")[0].style.display = "block";
 
 						// CLEARING ANY PREVIOUS ANIMATION (IF ANY)
 						animateClear();
@@ -421,7 +421,7 @@
 					animateClear();
 
 					// SHOWING THE LOADING SPLASH
-					document.getElementById("loading").style.display = "block";
+					document.getElementsByClassName("loading_splash")[0].style.display = "block";
 
 					setTimeout(function()
 						{
@@ -507,7 +507,7 @@
 				gif.on("finished", function(blob)
 					{
 					// HIDING THE LOADING SPLASH
-					document.getElementById("loading").style.display = "none";
+					document.getElementsByClassName("loading_splash")[0].style.display = "none";
 
 					// DOWNLOADING THE GIF FILE
 					save(blob,"TalkingHead.gif");
