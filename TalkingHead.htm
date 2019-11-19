@@ -55,6 +55,22 @@
 			</div>
 		</div>
 
+		<div class="settings_container">
+			<div class="settings_window">
+				<div class="settings_title">
+					<div class="settings_title_value"></div>
+				</div>
+				<div class="settings_select_container">
+					<select class="settings_select_voices">
+						<option value="0">0</option>
+					</select>
+				</div>
+				<div class="settings_button_container">
+					<input type="button" class="settings_button_ok" value="OK">
+				</div>
+			</div>
+		</div>
+
 		<div class="canvas_container"><canvas width="1" height="1" id="myCanvas"></canvas><canvas width="1" height="1" id="myCanvasGIF"></canvas><canvas width="1" height="1" id="myCanvasResult"></canvas></div>
 
 		<div class="canvas_assets">
@@ -139,25 +155,34 @@
 
 			var userLanguage = window.navigator.userLanguage || window.navigator.language;
 
+			var STRING_OK = "";
 			var STRING_EYE = "";
 			var STRING_MOUTH = "";
+			var STRING_SELECTAVOICE = "";
 			var STRING_EMPTYWORKSPACE = "";
 			var STRING_ERRORWITHEXTENSION = "";
 
 			if (userLanguage.substring(0,2)=="es")
 				{
+				STRING_OK = "ACEPTAR";
 				STRING_EYE = "OJO";
 				STRING_MOUTH = "BOCA";
+				STRING_SELECTAVOICE = "Seleccione una voz";
 				STRING_EMPTYWORKSPACE = "Debe cargar una imagen para descargar el espacio de trabajo.";
 				STRING_ERRORWITHEXTENSION = "ERROR: Por favor verifique que el archivo se encuentre en formato PNG, JPG o TAL.";
 				}
 				else
 				{
+				STRING_OK = "OK";
 				STRING_EYE = "EYE";
 				STRING_MOUTH = "MOUTH";
+				STRING_SELECTAVOICE = "Select a voice";
 				STRING_EMPTYWORKSPACE = "You must load an image in order to download the workspace.";
 				STRING_ERRORWITHEXTENSION = "ERROR: Please check that the file is in PNG, JPG or TAL format.";
 				}
+
+			document.getElementsByClassName("settings_title_value")[0].innerHTML = STRING_SELECTAVOICE;
+			document.getElementsByClassName("settings_button_ok")[0].value = STRING_OK;
 
 			// CREATING THE IMAGE VARIABLE
 			var myImage = new Image();
@@ -385,6 +410,7 @@
 
 			function menuSettings()
 				{
+				document.getElementsByClassName("settings_container")[0].style.display = "block";
 				}
 
 			function menuMove()
@@ -535,6 +561,10 @@
 				document.getElementById("myCanvas").addEventListener("click", mouseClickHandler);
 				document.getElementById("myCanvas").addEventListener("mouseover", mouseOverHandler);
 				document.getElementById("myCanvas").addEventListener("mousemove", mouseMoveHandler);
+				document.getElementsByClassName("settings_button_ok")[0].addEventListener("click",function(event)
+					{
+					document.getElementsByClassName("settings_container")[0].style.display = "none";
+					});
 				loadVoices();
 				}
 		</script>
