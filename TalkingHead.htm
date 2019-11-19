@@ -23,6 +23,10 @@
 			</div>
 			<div class="menubar_separator"></div>
 			<div class="menubar_holder">
+				<div class="menubar_button_settings_enabled" id="buttonSettings" onclick="menuSettings();"></div>
+			</div>
+			<div class="menubar_separator"></div>
+			<div class="menubar_holder">
 				<div class="menubar_button_eye1_enabled" id="buttonEye1" onclick="setTool(SELECTED_TOOL_EYE1);"></div>
 			</div>
 			<div class="menubar_holder">
@@ -370,6 +374,10 @@
 					{
 					alert(STRING_EMPTYWORKSPACE);
 					}
+				}
+
+			function menuSettings()
+				{
 				}
 
 			function menuSpeak()
