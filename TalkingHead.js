@@ -1,23 +1,25 @@
 function loadVoices()
 	{
-	voiceSynthesizer.onvoiceschanged = function()
+	try
 		{
-		var voices = voiceSynthesizer.getVoices();
-
-		console.log("see all available languages and voices on your system: ", voices);
-
-		/*
-		for(var i = 0; i < voices.length ; i++)
+		voiceSynthesizer.onvoiceschanged = function()
 			{
-			if(voices[i].name == voiceName)
-			{
-			resolve(voices[i]);
+			var voices = voiceSynthesizer.getVoices();
+
+			for(var i = 0; i < voices.length ; i++)
+				{
+				var voiceName = voices[i].name;
+				var voiceLanguage = voices[i].lang;
+
+				console.log(voiceName + " - " + voiceLanguage);
+				}
 			}
-		}
-		*/
-		}
 
-	voiceSynthesizer.getVoices();
+		voiceSynthesizer.getVoices();
+		}
+		catch(err)
+		{
+		}
 	}
 
 function mouseClickHandler()
