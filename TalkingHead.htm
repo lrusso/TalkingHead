@@ -133,6 +133,10 @@
 			var selectedTool = null;
 			var selectedTAL = false;
 
+			var voiceList = [];
+			var voiceSelected = 0;
+			var voiceSynthesizer = window.speechSynthesis;
+
 			var userLanguage = window.navigator.userLanguage || window.navigator.language;
 
 			var STRING_EYE = "";
@@ -531,6 +535,7 @@
 				document.getElementById("myCanvas").addEventListener("click", mouseClickHandler);
 				document.getElementById("myCanvas").addEventListener("mouseover", mouseOverHandler);
 				document.getElementById("myCanvas").addEventListener("mousemove", mouseMoveHandler);
+				loadVoices();
 				}
 		</script>
 	</body>

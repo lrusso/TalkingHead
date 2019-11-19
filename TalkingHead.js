@@ -1,3 +1,25 @@
+function loadVoices()
+	{
+	voiceSynthesizer.onvoiceschanged = function()
+		{
+		var voices = voiceSynthesizer.getVoices();
+
+		console.log("see all available languages and voices on your system: ", voices);
+
+		/*
+		for(var i = 0; i < voices.length ; i++)
+			{
+			if(voices[i].name == voiceName)
+			{
+			resolve(voices[i]);
+			}
+		}
+		*/
+		}
+
+	voiceSynthesizer.getVoices();
+	}
+
 function mouseClickHandler()
 	{
 	var eventX = event.clientX;
