@@ -33,7 +33,7 @@ function loadVoices()
 				{
 				var tempValue = voiceList[i].split("|");
 
-				var tempOption = document.createElement('option');
+				var tempOption = document.createElement("option");
 				tempOption.value = tempValue[1];
 				tempOption.innerHTML = tempValue[0] + " - " + tempValue[2];
 
