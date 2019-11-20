@@ -2,6 +2,8 @@ function loadVoices()
 	{
 	try
 		{
+		voiceList = [];
+
 		voiceSynthesizer.onvoiceschanged = function()
 			{
 			var voices = voiceSynthesizer.getVoices();
@@ -10,9 +12,14 @@ function loadVoices()
 				{
 				var voiceName = voices[i].name;
 				var voiceLanguage = voices[i].lang;
+				voiceLanguage = voiceLanguage.substring(0, 2); 
 
-				console.log(voiceName + " - " + voiceLanguage);
+				var finalResult = voiceLanguage + "|" + i + "|" + voiceName;
+				voiceList.push(finalResult);
 				}
+
+			voiceList.sort();
+			console.log(voiceList);
 			}
 
 		voiceSynthesizer.getVoices();
