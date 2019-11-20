@@ -13,7 +13,7 @@ function loadVoices()
 				{
 				var voiceName = voices[i].name;
 				var voiceLanguage = voices[i].lang;
-				voiceLanguage = voiceLanguage.substring(0, 2); 
+				voiceLanguage = voiceLanguage.substring(0, 2).toUpperCase();
 
 				var finalResult = voiceLanguage + "|" + i + "|" + voiceName;
 				voiceList.push(finalResult);
