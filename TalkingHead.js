@@ -8,7 +8,8 @@ function loadVoices()
 			{
 			var voices = voiceSynthesizer.getVoices();
 
-			for(var i = 0; i < voices.length ; i++)
+			// GETTING ALL THE VOICES
+			for(var i=0;i<voices.length;i++)
 				{
 				var voiceName = voices[i].name;
 				var voiceLanguage = voices[i].lang;
@@ -18,8 +19,26 @@ function loadVoices()
 				voiceList.push(finalResult);
 				}
 
+			// SORTING THE VOICES
 			voiceList.sort();
-			console.log(voiceList);
+
+			// CLEARING THE SELECT BOX
+			for(var i = document.getElementsByClassName("settings_select_voices")[0].options.length - 1 ; i >= 0 ; i--)
+				{
+				document.getElementsByClassName("settings_select_voices")[0].remove(i);
+				}
+
+			// ADDING THE VOICES TO THE SELECT BOX
+			for(var i=0;i<voiceList.length;i++)
+				{
+				var tempValue = voiceList[i].split("|");
+
+				var tempOption = document.createElement('option');
+				tempOption.value = tempValue[1];
+				tempOption.innerHTML = tempValue[0] + " - " + tempValue[2];
+
+				document.getElementsByClassName("settings_select_voices")[0].add(tempOption);
+				}
 			}
 
 		voiceSynthesizer.getVoices();
