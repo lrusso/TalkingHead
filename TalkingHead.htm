@@ -556,7 +556,7 @@
 				link.click();
 				}
 
-			window.onload = function()
+			window.addEventListener("load", function()
 				{
 				document.getElementById("myCanvas").addEventListener("click", mouseClickHandler);
 				document.getElementById("myCanvas").addEventListener("mouseover", mouseOverHandler);
@@ -566,7 +566,7 @@
 					document.getElementsByClassName("settings_container")[0].style.display = "none";
 					});
 				loadVoices();
-				}
+				});
 		</script>
 	</body>
 </html>
